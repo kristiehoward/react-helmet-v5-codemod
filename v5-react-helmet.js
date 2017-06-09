@@ -35,16 +35,16 @@ export default function transformer(file, api) {
     return j.jsxAttribute(j.jsxIdentifier(prop.key.name), value);
   };
 
-  // Given a name, an array of jsx attributes, and an array of children, return a
-  // jsxElement with those attributes and children
+  // Given a name, an array of jsx attributes, and an array of children, return
+  // a jsxElement with those attributes and children
   const createElementWithAttrsAndChildren = (name, attrs, children) => {
     const opening = j.jsxOpeningElement(name);
     opening.attributes = attrs;
     return j.jsxElement(opening, j.jsxClosingElement(name), children);
   };
 
-  // Given a name and an array of jsx attributes, return a self closing jsxElement
-  // with those attributes
+  // Given a name and an array of jsx attributes, return a self closing
+  // jsxElement with those attributes
   const createSelfClosingElementWithAttrs = (name, attrs) => {
     const tag = j.jsxOpeningElement(name);
     tag.selfClosing = true;
@@ -118,7 +118,7 @@ export default function transformer(file, api) {
     // Remove the props that are now children
     const attrs = p.node.openingElement.attributes.filter(isPropAttr);
     const replacement = createElementWithAttrsAndChildren(name, attrs, []);
-	// Some weird bug where it wont work with children in the previous step
+	   // Some weird bug where it wont work with children in the previous step
     replacement.children = children;
     return replacement;
   });
