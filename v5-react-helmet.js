@@ -1,4 +1,4 @@
-export default function transformer(file, api) {
+module.exports = function(file, api) {
   const j = api.jscodeshift;
   const root = j(file.source);
 
@@ -20,6 +20,10 @@ export default function transformer(file, api) {
 
   // Given a property, return a jsxExpressionContainer with that property inside
   const convertPropertyToContainer = prop => {
+    // amp=undefined
+    if (prop.value.type === "Identifier") {
+      return null;
+    }
     const contents = prop.value.type === "Literal" ? j.literal(prop.value.rawValue) : j.templateLiteral(prop.value.quasis, prop.value.expressions);
     return j.jsxExpressionContainer(contents);
   };
@@ -92,7 +96,7 @@ export default function transformer(file, api) {
           ? createElementWithAttrsAndChildren(a.name, attrs, children)
           : createSelfClosingElementWithAttrs(a.name, attrs);
         tags.push(tag);
-        tags.push(j.literal("\n"));
+        // tags.push(j.literal("\n"));
       });
     }
 
@@ -106,7 +110,7 @@ export default function transformer(file, api) {
     }
     const newTags = convertAttrToTags(a);
     children.push(...newTags);
-    children.push(j.literal("\n"));
+    // children.push(j.literal("\n"));
   };
 
   let result = root.findJSXElements("Helmet").replaceWith(p => {
