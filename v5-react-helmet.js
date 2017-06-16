@@ -21,9 +21,7 @@ module.exports = function(file, api) {
   // Given a property, return a jsxExpressionContainer with that property inside
   const convertPropertyToContainer = prop => {
     // amp=undefined
-    if (prop.value.type === "Identifier") {
-      return null;
-    }
+    if (prop.value.type === "Identifier") { return null; }
     const contents = prop.value.type === "Literal" ? j.literal(prop.value.rawValue) : j.templateLiteral(prop.value.quasis, prop.value.expressions);
     return j.jsxExpressionContainer(contents);
   };
@@ -65,6 +63,7 @@ module.exports = function(file, api) {
     if (type === "title") {
       // <title>{value}</title>
       tags.push(createElementWithAttrsAndChildren(a.name, [], [a.value]));
+      tags.push(j.literal("\n"));
     }
     if (type === "titleAttributes") {
       // Create jsx attributes that we can later apply to the title element
@@ -75,7 +74,7 @@ module.exports = function(file, api) {
       const attrs = a.value.expression.properties.map(convertPropertyToAttr);
       a.name.name = "html";
       const tag = createSelfClosingElementWithAttrs(a.name, attrs);
-      tags.push(tag);
+      tags.push(tag, j.literal("\n"));
     }
 
     if (a.value.expression && a.value.expression.type === "ArrayExpression") {
@@ -95,8 +94,7 @@ module.exports = function(file, api) {
         const tag = children.length
           ? createElementWithAttrsAndChildren(a.name, attrs, children)
           : createSelfClosingElementWithAttrs(a.name, attrs);
-        tags.push(tag);
-        // tags.push(j.literal("\n"));
+        tags.push(tag, j.literal("\n"));
       });
     }
 
@@ -105,12 +103,9 @@ module.exports = function(file, api) {
 
   const processAttr = children => a => {
     // Do nothing if the attribute should remain as a prop on the <Helmet> tag
-    if (isPropAttr(a)) {
-      return;
-    }
+    if (isPropAttr(a)) { return; }
     const newTags = convertAttrToTags(a);
     children.push(...newTags);
-    // children.push(j.literal("\n"));
   };
 
   let result = root.findJSXElements("Helmet").replaceWith(p => {
