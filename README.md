@@ -29,6 +29,87 @@ I used an [old README](https://github.com/nfl/react-helmet/blob/f392aaef69cce3cd
 
 This codemod saved us a bunch of time for Docker Store, so I hope it is helpful for you too! Since everyone has different use cases, let me know if you have any examples that I could add to the tests and handle!
 
+## Example
+
+#### Input
+[Old React-Helmet readme](https://github.com/nfl/react-helmet/blob/f392aaef69cce3cd1951dd96e4f860bf8104843a/README.md)
+
+```
+import React from "react";
+import Helmet from "react-helmet";
+
+export default function Application () {
+    return (
+        <div className="application">
+            <Helmet
+                htmlAttributes={{lang: "en", amp: undefined}} // amp takes no value
+                title="My Title"
+                titleTemplate="MySite.com - %s"
+                defaultTitle="My Default Title"
+                titleAttributes={{itemprop: "name", lang: "en"}}
+                base={{target: "_blank", href: "http://mysite.com/"}}
+                meta={[
+                    {name: "description", content: "Helmet application"},
+                    {property: "og:type", content: "article"}
+                ]}
+                link={[
+                    {rel: "canonical", href: "http://mysite.com/example"},
+                    {rel: "apple-touch-icon", href: "http://mysite.com/img/apple-touch-icon-57x57.png"},
+                    {rel: "apple-touch-icon", sizes: "72x72", href: "http://mysite.com/img/apple-touch-icon-72x72.png"}
+                ]}
+                script={[
+                    {src: "http://include.com/pathtojs.js", type: "text/javascript"},
+                    {type: "application/ld+json", innerHTML: `{ "@context": "http://schema.org" }`}
+                ]}
+                noscript={[
+                    {innerHTML: `<link rel="stylesheet" type="text/css" href="foo.css" />`}
+                ]}
+                style={[
+                  {type: "text/css", cssText: "body {background-color: blue;} p {font-size: 12px;}"}
+                ]}
+                onChangeClientState={(newState) => console.log(newState)}
+            />
+        </div>
+    );
+};
+```
+
+#### Output
+Below is actual output. Note that it matches the new [React-Helmet README](https://github.com/nfl/react-helmet)
+```
+import React from "react";
+import Helmet from "react-helmet";
+
+export default function Application () {
+    return (
+        <div className="application">
+            <Helmet
+                titleTemplate="MySite.com - %s"
+                defaultTitle="My Default Title"
+                onChangeClientState={(newState) => console.log(newState)}>
+                <html lang="en" amp />
+                <title itemprop="name" lang="en">My Title</title>
+                <base target="_blank" href="http://mysite.com/" />
+                <meta name="description" content="Helmet application" />
+                <meta property="og:type" content="article" />
+                <link rel="canonical" href="http://mysite.com/example" />
+                <link
+                    rel="apple-touch-icon"
+                    href="http://mysite.com/img/apple-touch-icon-57x57.png" />
+                <link
+                    rel="apple-touch-icon"
+                    sizes="72x72"
+                    href="http://mysite.com/img/apple-touch-icon-72x72.png" />
+                <script src="http://include.com/pathtojs.js" type="text/javascript" />
+                <script type="application/ld+json">{`{ "@context": "http://schema.org" }`}</script>
+                <noscript>{`<link rel="stylesheet" type="text/css" href="foo.css" />`}</noscript>
+                <style type="text/css">{"body {background-color: blue;} p {font-size: 12px;}"}</style>
+            </Helmet>
+        </div>
+    );
+};
+```
+
 ## Usage
 
 Install `jscodeshift` using `npm` or `yarn`
@@ -63,6 +144,11 @@ jscodeshift -t transform.js tests/ -d -p
 // Do a dry run of this transform on a single file and print the results
 jscodeshift -t transform.js /path/to/my/file.js -d -p
 ```
+
+## TODOs
+
+- [ ] Run tests using jest
+- [ ] Ensure `bodyAttributes` works - need to find an example of someone using this
 
 ## Known Issues
 

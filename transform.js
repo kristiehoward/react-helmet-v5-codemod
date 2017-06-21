@@ -30,8 +30,6 @@ module.exports = function(file, api) {
   const convertPropertyToContainer = prop => {
     // amp=undefined
     if (prop.value.type === "Identifier") {
-      // throw new Error("cant do antying");
-      console.warn("serious error");
       return null;
     }
     const contents = prop.value.type === "Literal"

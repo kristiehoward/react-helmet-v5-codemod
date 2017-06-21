@@ -1,10 +1,10 @@
-// import React from "react";
-// import Helmet from "react-helmet";
+import React from "react";
+import Helmet from "react-helmet";
 
 // Previous react-helmet readme before v5.0.0
 // https://github.com/nfl/react-helmet/blob/f392aaef69cce3cd1951dd96e4f860bf8104843a/README.md
 
-export default function Application() {
+export default function Application () {
     return (
         <div className="application">
             <Helmet
