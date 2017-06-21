@@ -150,6 +150,9 @@ module.exports = function(file, api) {
     // For each of the <Helmet> attributes, process them and add them to the
     // children array if appropriate
     p.node.openingElement.attributes.forEach(a => {
+      if (a.type === "JSXSpreadAttribute") {
+        throw new Error("Cannot process JSX spread attributes");
+      }
       // Do nothing if the attribute should remain as a prop on the <Helmet> tag
       if (isPropAttr(a)) {
         return;
