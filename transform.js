@@ -2,13 +2,21 @@ module.exports = function(file, api) {
   const j = api.jscodeshift;
   const root = j(file.source);
 
+  // Given text, return a comment that can be used as children to a JSX element
+  const createComment = text => {
+    const el = j.jsxEmptyExpression();
+    el.comments = [j.block(text)];
+    return j.jsxExpressionContainer(el);
+  };
+
+
   // Keep track of any title attributes we may find so we can apply them after
   let titleAttributes = [];
 
   // Return true if the JSXAttribute supplied should be left in props
   const isPropAttr = a => {
-    const name = a.name.name;
-    return name === "defaultTitle" || name === "titleTemplate" || name === "onChangeClientState";
+    // The following attributes are the only ones that should be left as props
+    return ["defaultTitle", "encodeSpecialCharacters", "onChangeClientState", "titleTemplate"].includes(a.name.name);
   };
 
   // Return true if the Property supplied should be given as a child instead of
@@ -22,10 +30,13 @@ module.exports = function(file, api) {
   const convertPropertyToContainer = prop => {
     // amp=undefined
     if (prop.value.type === "Identifier") {
-      console.log('ID ', prop)
+      // throw new Error("cant do antying");
+      console.warn("serious error");
       return null;
     }
-    const contents = prop.value.type === "Literal" ? j.literal(prop.value.rawValue) : j.templateLiteral(prop.value.quasis, prop.value.expressions);
+    const contents = prop.value.type === "Literal"
+      ? j.literal(prop.value.rawValue)
+      : j.templateLiteral(prop.value.quasis, prop.value.expressions);
     return j.jsxExpressionContainer(contents);
   };
 
@@ -57,10 +68,20 @@ module.exports = function(file, api) {
     return tag;
   };
 
+  // Given an attribute from the <Helmet> element, create a tag with the
+  // value of the expression as a JSX container body
+  // and comments surrounding it so that the user can easily find them
+  // Ex: meta={getMeta()} ==> <meta>{getMeta()}</meta>
+  const convertAttrToCommentedTags = a => {
+    const comment = createComment("WARNING: Unable to translate the following tag");
+    const children = [j.jsxExpressionContainer(a.value.expression)];
+    return [comment, createElementWithAttrsAndChildren(a.name, [], children)];
+  };
+
   // Given properties, an array for attributes, and an array for children,
   // convert each property to a container or an array and save them in either
   // the attributes or children arrays
-  const processProperties = (properties) => {
+  const convertPropertiesToTag = (properties, name) => {
     const attrs = [];
     const children = [];
     properties.forEach(p => {
@@ -71,54 +92,58 @@ module.exports = function(file, api) {
         attrs.push(convertPropertyToAttr(p));
       }
     });
-    return [attrs, children];
+    const tag = children.length
+      ? createElementWithAttrsAndChildren(name, attrs, children)
+      : createSelfClosingElementWithAttrs(name, attrs);
+    return tag;
   };
 
-  // Given an attribute (prop) on the <Helmet> tag, convert it into the appropriate
-  // tag(s) and return an array of tags
+  // Given an attribute (prop) on the <Helmet> tag, convert it into the
+  // appropriate tag(s) and return an array of tags
   const convertAttrToTags = a => {
     const tags = [];
     const type = a.name.name;
+    let tag;
 
-    if (type === "title") {
-      // <title>{value}</title>
-      tags.push(createElementWithAttrsAndChildren(a.name, [], [a.value]));
-      tags.push(j.literal("\n"));
-    }
-    if (type === "titleAttributes") {
-      // Create jsx attributes that we can later apply to the title element
-      titleAttributes = a.value.expression.properties.map(convertPropertyToAttr);
-    }
-    if (type === "htmlAttributes") {
-      // Create an <html> tag with those attributes
-      const attrs = a.value.expression.properties.map(convertPropertyToAttr);
-      a.name.name = "html";
-      const tag = createSelfClosingElementWithAttrs(a.name, attrs);
-      tags.push(tag, j.literal("\n"));
-    }
-
-    if (a.value.expression && a.value.expression.type === "ObjectExpression") {
-      // const attrs = [];
-      // const children = [];
-      // Create an array of attributes to give to the new tag
-      const [attrs, children] = processProperties(a.value.expression.properties);
-      const tag = children.length ? createElementWithAttrsAndChildren(a.name, attrs, children) : createSelfClosingElementWithAttrs(a.name, attrs);
-      tags.push(tag, j.literal("\n"));
-    }
-    if (a.value.expression && a.value.expression.type === "ArrayExpression") {
-      // For each of the array elements
-      a.value.expression.elements.forEach(e => {
-        // const attrs = [];
-        // const children = [];
-        // Create an array of attributes to give to the new tag
-        const [attrs, children] = processProperties(e.properties);
-        const tag = children.length
-          ? createElementWithAttrsAndChildren(a.name, attrs, children)
-          : createSelfClosingElementWithAttrs(a.name, attrs);
+    switch (type) {
+      case "title":
+        tags.push(createElementWithAttrsAndChildren(a.name, [], [a.value]));
+        tags.push(j.literal("\n"));
+        break;
+      case "titleAttributes":
+        // Create and save jsx attributes that we can later apply to the <title>
+        titleAttributes = a.value.expression.properties.map(convertPropertyToAttr);
+        break;
+      case "htmlAttributes":
+        // Create an <html> tag with those attributes
+        const htmlAttrs = a.value.expression.properties.map(convertPropertyToAttr);
+        a.name.name = "html";
+        tag = createSelfClosingElementWithAttrs(a.name, htmlAttrs);
         tags.push(tag, j.literal("\n"));
-      });
+        break;
+      case "base":
+        tag = convertPropertiesToTag(a.value.expression.properties, a.name);
+        tags.push(tag, j.literal("\n"));
+        break;
+      case "meta":
+      case "link":
+      case "script":
+      case "noscript":
+      case "style":
+        // Could be a different JSX expression - either way, we don't know how
+        // to translate this, so mark it with a comment for the user to translate
+        // by hand. ex. meta={getMeta()} instead of meta={{ ... }}
+        if (a.value.expression && !a.value.expression.elements) {
+          tags.push(...convertAttrToCommentedTags(a), j.literal("\n"));
+          break;
+        }
+        a.value.expression.elements.forEach(e => {
+          tag = convertPropertiesToTag(e.properties, a.name);
+          tags.push(tag, j.literal("\n"));
+        });
+        break;
+      default:
     }
-
     return tags;
   };
 
@@ -128,7 +153,9 @@ module.exports = function(file, api) {
     // children array if appropriate
     p.node.openingElement.attributes.forEach(a => {
       // Do nothing if the attribute should remain as a prop on the <Helmet> tag
-      if (isPropAttr(a)) { return; }
+      if (isPropAttr(a)) {
+        return;
+      }
       const newTags = convertAttrToTags(a);
       children.push(...newTags);
     });
