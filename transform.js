@@ -51,19 +51,15 @@ module.exports = function(file, api) {
 
   // Given a name, an array of jsx attributes, and an array of children, return
   // a jsxElement with those attributes and children
-  const createElementWithAttrsAndChildren = (name, attrs, children) => {
+  const createElementWithAttrsAndChildren = (name, attrs, children = []) => {
     const opening = j.jsxOpeningElement(name);
     opening.attributes = attrs;
-    return j.jsxElement(opening, j.jsxClosingElement(name), children);
-  };
-
-  // Given a name and an array of jsx attributes, return a self closing
-  // jsxElement with those attributes
-  const createSelfClosingElementWithAttrs = (name, attrs) => {
-    const tag = j.jsxOpeningElement(name);
-    tag.selfClosing = true;
-    tag.attributes = attrs;
-    return tag;
+    let closing = j.jsxClosingElement(name);
+    if (!children || !children.length) {
+      opening.selfClosing = true;
+      closing = null;
+    }
+    return j.jsxElement(opening, closing, children);
   };
 
   // Given an attribute from the <Helmet> element, create a tag with the
@@ -90,10 +86,7 @@ module.exports = function(file, api) {
         attrs.push(convertPropertyToAttr(p));
       }
     });
-    const tag = children.length
-      ? createElementWithAttrsAndChildren(name, attrs, children)
-      : createSelfClosingElementWithAttrs(name, attrs);
-    return tag;
+    return createElementWithAttrsAndChildren(name, attrs, children)
   };
 
   // Given an attribute (prop) on the <Helmet> tag, convert it into the
@@ -116,7 +109,7 @@ module.exports = function(file, api) {
         // Create an <html> tag with those attributes
         const htmlAttrs = a.value.expression.properties.map(convertPropertyToAttr);
         a.name.name = "html";
-        tag = createSelfClosingElementWithAttrs(a.name, htmlAttrs);
+        tag = createElementWithAttrsAndChildren(a.name, htmlAttrs, []);
         tags.push(tag, j.literal("\n"));
         break;
       case "base":
@@ -146,7 +139,7 @@ module.exports = function(file, api) {
   };
 
   let result = root.findJSXElements("Helmet").replaceWith(p => {
-    const children = [j.literal("\n")];
+    const children = [];
     // For each of the <Helmet> attributes, process them and add them to the
     // children array if appropriate
     p.node.openingElement.attributes.forEach(a => {
@@ -163,10 +156,11 @@ module.exports = function(file, api) {
     const name = p.node.openingElement.name;
     // Remove the props that are now children
     const attrs = p.node.openingElement.attributes.filter(isPropAttr);
-    const replacement = createElementWithAttrsAndChildren(name, attrs, []);
-    // Some weird bug where it wont work with children in the previous step
-    replacement.children = children;
-    return replacement;
+    if (children.length) {
+      // Add a newline for formatting if children were found
+      children.unshift(j.literal("\n"));
+    }
+    return createElementWithAttrsAndChildren(name, attrs, children)
   });
   // If there are titleAttributes found, add those to the <title> tag
   if (titleAttributes && titleAttributes.length) {
