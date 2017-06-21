@@ -4,7 +4,30 @@ Codemod built using jscodeshift to upgrade to version 5 of react-helmet.
 
 [React Helmet](https://github.com/nfl/react-helmet) recently released a new version which makes the API much simpler moving forward. We are using react-helmet in over 40 different files in Docker Store, so I figured it would be best to write a codemod using jscodeshift instead of manually fixing the issues.
 
-This is my first codemod so suggestions welcome!
+The main changes are that almost all of the props on the `<Helmet>` component are now supposed to be provided as children in the form of tags like `<meta>`.
+This codemod takes into account the "rules" for translating each of the accepted props from the old version, and translates them to the new API.
+
+For example, what was previously
+```
+<Helmet
+    title="My Title"
+    meta={[
+        {name: "description", content: "Helmet application"}
+    ]}
+/>
+```
+is now
+
+```
+<Helmet>
+    <title>My Title</title>
+    <meta name="description" content="Helmet application" />
+</Helmet>
+```
+
+I used an [old README](https://github.com/nfl/react-helmet/blob/f392aaef69cce3cd1951dd96e4f860bf8104843a/README.md) when testing my codemod. For more information on the v5 API change, please see the [release notes](https://github.com/nfl/react-helmet/pull/246)
+
+This codemod saved us a bunch of time for Docker Store, so I hope it is helpful for you too! Since everyone has different use cases, let me know if you have any examples that I could add to the tests and handle!
 
 ## Usage
 
