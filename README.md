@@ -116,6 +116,7 @@ Install `jscodeshift` using `npm` or `yarn`
 ```
 // yarn
 yarn global add jscodeshift
+
 // or npm
 npm i -g jscodeshift
 ```
@@ -129,6 +130,7 @@ Install the dependencies using `npm` or `yarn` in the `react-helmet-v5-codemod` 
 ```
 // yarn
 yarn install
+
 // or npm
 npm i
 ```
@@ -143,6 +145,9 @@ jscodeshift -t src/transform.js src/__testfixtures__ -d -p
 
 // Do a dry run of this transform on a single file and print the results
 jscodeshift -t src/transform.js /path/to/my/file.js -d -p
+
+// Actually run the transform on your files
+jscodeshift -t src/transform.js /path/to/my/file.js
 ```
 
 ## Testing
