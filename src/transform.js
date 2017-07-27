@@ -22,7 +22,7 @@ module.exports = function(file, api) {
   // Return true if the Property supplied should be given as a child instead of
   // a prop when creating a new jsxElement
   const isChildProperty = p => {
-    const name = (p.name && p.name.name) || (p.key && p.key.name);
+    const name = p.key && p.key.name;
     return name === "innerHTML" || name === "cssText";
   };
 
@@ -51,7 +51,7 @@ module.exports = function(file, api) {
 
   // Given a name, an array of jsx attributes, and an array of children, return
   // a jsxElement with those attributes and children
-  const createElementWithAttrsAndChildren = (name, attrs, children = []) => {
+  const createElementWithAttrsAndChildren = (name, attrs, children) => {
     const opening = j.jsxOpeningElement(name);
     opening.attributes = attrs;
     let closing = j.jsxClosingElement(name);
@@ -134,6 +134,7 @@ module.exports = function(file, api) {
         });
         break;
       default:
+        break;
     }
     return tags;
   };

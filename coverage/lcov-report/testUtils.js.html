@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for testUtils.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="prettify.css" />
+    <link rel="stylesheet" href="base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="index.html">All files</a> testUtils.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">33.33% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>8/24</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">7.14% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>1/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">50% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>3/6</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">34.78% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>8/23</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/* eslint-disable */
+&nbsp;
+/**
+ * NOTE:
+ * This was copied over from https://github.com/facebook/jscodeshift/blob/master/src/testUtils.js,
+ * but is modified so that it can use jest snapshot testing and certain errors.
+ * The below LICENSE file can be found at https://github.com/facebook/jscodeshift.
+ */
+&nbsp;
+&nbsp;
+/**
+ *  Copyright (c) 2016-present, Facebook, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ */
+&nbsp;
+/* global expect, describe, it */
+&nbsp;
+'use strict';
+&nbsp;
+const fs = require('fs');
+const path = require('path');
+&nbsp;
+/**
+ * Utility function to run a jscodeshift script within a unit test. This makes
+ * several assumptions about the environment:
+ *
+ * - `dirName` contains the name of the directory the test is located in. This
+ *   should normally be passed via __dirname.
+ * - The test should be located in a subdirectory next to the transform itself.
+ *   Commonly tests are located in a directory called __tests__.
+ * - `transformName` contains the filename of the transform being tested,
+ *   excluding the .js extension.
+ * - `testFilePrefix` optionally contains the name of the file with the test
+ *   data. If not specified, it defaults to the same value as `transformName`.
+ *   This will be suffixed with ".input.js" for the input file and ".output.js"
+ *   for the expected output. For example, if set to "foo", we will read the
+ *   "foo.input.js" file, pass this to the transform, and expect its output to
+ *   be equal to the contents of "foo.output.js".
+ * - Test data should be located in a directory called __testfixtures__
+ *   alongside the transform and __tests__ directory.
+ */
+ // NOTE: Added error here
+function <span class="fstat-no" title="function not covered" >runTest(</span>dirName, transformName, options, testFilePrefix, error) {
+<span class="cstat-no" title="statement not covered" >  if (!testFilePrefix) {</span>
+<span class="cstat-no" title="statement not covered" >    testFilePrefix = transformName;</span>
+  }
+&nbsp;
+  const fixtureDir = <span class="cstat-no" title="statement not covered" >path.join(dirName, '..', '__testfixtures__');</span>
+  const inputPath = <span class="cstat-no" title="statement not covered" >path.join(fixtureDir, testFilePrefix + '.input.js');</span>
+  const source = <span class="cstat-no" title="statement not covered" >fs.readFileSync(inputPath, 'utf8');</span>
+  // const expectedOutput = fs.readFileSync(
+  //   path.join(fixtureDir, testFilePrefix + '.output.js'),
+  //   'utf8'
+  // );
+  // Assumes transform is one level up from __tests__ directory
+  const module = <span class="cstat-no" title="statement not covered" >require(path.join(dirName, '..', transformName + '.js'));</span>
+  // Handle ES6 modules using default export for the transform
+  const transform = <span class="cstat-no" title="statement not covered" >module.default ? module.default : module;</span>
+&nbsp;
+  // Jest resets the module registry after each test, so we need to always get
+  // a fresh copy of jscodeshift on every test run.
+  let jscodeshift = <span class="cstat-no" title="statement not covered" >require('jscodeshift/dist/core');</span>
+<span class="cstat-no" title="statement not covered" >  if (module.parser) {</span>
+<span class="cstat-no" title="statement not covered" >    jscodeshift = jscodeshift.withParser(module.parser);</span>
+  }
+&nbsp;
+  const output = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >transform(</span></span>
+    {path: inputPath, source},
+    {
+      jscodeshift,
+      stats: <span class="fstat-no" title="function not covered" >()</span> =&gt; {},
+    },
+    options || {}
+  );
+<span class="cstat-no" title="statement not covered" >  if (error) {</span>
+<span class="cstat-no" title="statement not covered" >    console.log('HELLO');</span>
+<span class="cstat-no" title="statement not covered" >    expect(output).toThrowError(error);</span>
+  } else {
+<span class="cstat-no" title="statement not covered" >    expect((output() || '').trim()).toMatchSnapshot();</span>
+  }
+}
+exports.runTest = runTest;
+&nbsp;
+/**
+ * Handles some boilerplate around defining a simple jest/Jasmine test for a
+ * jscodeshift transform.
+ */
+function defineTest(dirName, transformName, options, testFilePrefix, error) {
+  const testName = testFilePrefix
+    ? `transforms correctly using "${testFilePrefix}" data`
+    : <span class="branch-1 cbranch-no" title="branch not covered" >'transforms correctly';</span>
+  describe(transformName, () =&gt; {
+    it(testName, () =&gt; {
+      runTest(dirName, transformName, options, testFilePrefix, shouldError);
+    });
+  });
+}
+exports.defineTest = defineTest;
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Wed Jul 26 2017 21:46:01 GMT-0700 (PDT)
+</div>
+</div>
+<script src="prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="sorter.js"></script>
+</body>
+</html>

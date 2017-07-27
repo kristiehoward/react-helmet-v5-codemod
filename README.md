@@ -136,18 +136,34 @@ npm i
 Run `jscodeshift` with this transform on your files. You can use the `-d` option to do a dry run on your files, and the `-p` option to print the results.
 ```
 // Usage
-jscodeshift -t <codemod-script> <path>
+jscodeshift -t <codemod-script> <path-to-your-file>
 
-// Do a dry run of this transform on the tests/ directory and print the results
-jscodeshift -t transform.js tests/ -d -p
+// Do a dry run of this transform on the __testfixtures__/ directory and print the results
+jscodeshift -t src/transform.js src/__testfixtures__ -d -p
 
 // Do a dry run of this transform on a single file and print the results
-jscodeshift -t transform.js /path/to/my/file.js -d -p
+jscodeshift -t src/transform.js /path/to/my/file.js -d -p
+```
+
+## Testing
+Tests use Jest and Jest Snapshots. The input files are located in `src/__testfixtures__`. For all the tests defined in `__tests__/transform.spec.js`, jest will look for the matching file in the test fixtures, run it through the codemod, and expect for the output to match the snapshot defined in `__tests__/__snapshots__` for that test case. For one example (testing the spread operator), we want the transform to throw an error, so Jest expects an error.
+
+Test coverage is at 100% for the `transform.js` file where the codemod is actually located. If you think of a new use case or edge case, please let me know and I can add it to the tests.
+
+How to run the tests
+```
+// run the tests using jest and yarn
+yarn test
+// or npm
+npm test
+
+// run the test using jest and yarn, with coverage printed out
+yarn test -- --coverage
 ```
 
 ## TODOs
 
-- [ ] Run tests using jest
+- [x] Run tests using jest
 - [ ] Ensure `bodyAttributes` works - need to find an example of someone using this
 
 ## Known Issues
